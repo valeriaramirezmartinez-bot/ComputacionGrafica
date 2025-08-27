@@ -3,6 +3,9 @@
 // Fecha de entrega: 26 / Agosto / 2025
 // 318063188
 
+// Número de cubos a utilizar: 7
+// Dos pisos de la piramide 
+
 #include<iostream>
 
 //#define GLEW_STATIC
@@ -299,12 +302,6 @@ int main() {
 
 
 		glBindVertexArray(0);
-
-
-
-
-
-
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
