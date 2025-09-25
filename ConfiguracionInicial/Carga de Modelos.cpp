@@ -98,6 +98,11 @@ int main()
     // Cargar modelos
     Model dog((char*)"Models/RedDog.obj");
     Model casa((char*)"Models/Hause 01.obj");
+    Model persona((char*)"Models/FinalBaseMesh.obj");
+    Model banca1((char*)"Models/bench.obj");
+    Model roca((char*)"Models/rocks_01_model.obj");
+    Model arbol((char*)"Models/plants2.obj");
+    Model lobo((char*)"Models/Wolf_One_obj.obj");
 
     glm::mat4 projection = glm::perspective(camera.GetZoom(), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 
@@ -160,35 +165,41 @@ int main()
         glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
         dog.Draw(shader);
 
+        // ========= Persona =========
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.7f, 0.2f, -0.0000001f));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(2.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        persona.Draw(shader);
 
+        // ========= Banca =========
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-3.0f, 0.2f, -3.0f));
+        model = glm::scale(model, glm::vec3(3.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        banca1.Draw(shader);
 
+        // ========= Roca =========
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-3.0f, 0.2f, -3.0f));
+        model = glm::scale(model, glm::vec3(1.2f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        roca.Draw(shader);
 
+        // ========= Arbol =========
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-3.0f, 0.2f, -3.0f));
+        model = glm::scale(model, glm::vec3(6.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        arbol.Draw(shader);
 
-
-
-
-        //// ========= Persona =========
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.0f));
-        //model = glm::scale(model, glm::vec3(0.01f));
-        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        //persona.Draw(shader);
-
-       
-
-        //// ========= Banca =========
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, glm::vec3(-3.0f, 0.0f, -3.0f));
-        //model = glm::scale(model, glm::vec3(0.01f));
-        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        //banca1.Draw(shader);
-
-        //// ========= Pájaros =========
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, glm::vec3(0.0f, 3.0f, -5.0f));
-        //model = glm::scale(model, glm::vec3(0.05f));
-        //glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        //pajaros.Draw(shader);
+        // ========= Lobo =========
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(-3.0f, 0.2f, -5.0f));
+        model = glm::scale(model, glm::vec3(6.0f));
+        glUniformMatrix4fv(glGetUniformLocation(shader.Program, "model"), 1, GL_FALSE, glm::value_ptr(model));
+        lobo.Draw(shader);
 
         glfwSwapBuffers(window);
     }
