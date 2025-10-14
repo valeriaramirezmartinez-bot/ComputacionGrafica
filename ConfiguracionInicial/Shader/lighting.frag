@@ -1,5 +1,4 @@
 #version 330 core
-
 struct Material {
     vec3 ambient;
     vec3 diffuse;
@@ -16,53 +15,36 @@ struct Light {
 
 in vec3 FragPos;
 in vec3 Normal;
-in vec2 TexCoords;
-
-out vec4 color;
+out vec4 FragColor;
 
 uniform vec3 viewPos;
 uniform Material material;
-uniform Light light1;
-uniform Light light2;
-
-uniform sampler2D texture_diffusse;
-
-// Función auxiliar para calcular la contribución de una luz
-vec3 CalcLight(Light light, vec3 norm, vec3 fragPos, vec3 viewDir)
-{
-    // Dirección de la luz
-    vec3 lightDir = normalize(light.position - fragPos);
-
-    // --- Difusa ---
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = light.diffuse * diff * material.diffuse;
-
-    // --- Especular ---
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * (spec * material.specular);
-
-    // --- Ambiental ---
-    vec3 ambient = light.ambient * material.ambient;
-
-    return (ambient + diffuse + specular);
-}
+uniform Light light1;  // Sol
+uniform Light light2;  // Luna
 
 void main()
 {
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    // Cálculo de iluminación de ambas luces
-    vec3 result1 = CalcLight(light1, norm, FragPos, viewDir);
-    vec3 result2 = CalcLight(light2, norm, FragPos, viewDir);
+    // === Luz 1 (sol) ===
+    vec3 lightDir1 = normalize(light1.position - FragPos);
+    float diff1 = max(dot(norm, lightDir1), 0.0);
+    vec3 reflectDir1 = reflect(-lightDir1, norm);
+    float spec1 = pow(max(dot(viewDir, reflectDir1), 0.0), material.shininess);
+    vec3 result1 = light1.ambient * material.ambient
+                 + light1.diffuse * diff1 * material.diffuse
+                 + light1.specular * spec1 * material.specular;
 
-    // Suma de ambas luces
-    vec3 lighting = result1 + result2;
+    // === Luz 2 (luna) ===
+    vec3 lightDir2 = normalize(light2.position - FragPos);
+    float diff2 = max(dot(norm, lightDir2), 0.0);
+    vec3 reflectDir2 = reflect(-lightDir2, norm);
+    float spec2 = pow(max(dot(viewDir, reflectDir2), 0.0), material.shininess);
+    vec3 result2 = light2.ambient * material.ambient
+                 + light2.diffuse * diff2 * material.diffuse
+                 + light2.specular * spec2 * material.specular;
 
-    // Combinar con textura
-    vec3 texColor = texture(texture_diffusse, TexCoords).rgb;
-    vec3 finalColor = lighting * texColor;
-
-    color = vec4(finalColor, 1.0);
+    vec3 color = result1 + result2;
+    FragColor = vec4(color, 1.0);
 }
