@@ -1,9 +1,7 @@
-// Valeria RamÌrez MartÌnez
-// Previo 10
-// Fecha de entrega: 23 / Octubre / 2025
+Ôªø// Valeria Ram√≠rez Mart√≠nez
+// Pr√°ctica 10
+// Fecha de entrega: 29 / Octubre / 2025
 // No. Cuenta: 318063188
-
-
 
 #include <iostream>
 #include <cmath>
@@ -110,13 +108,13 @@ glm::vec3 Light1 = glm::vec3(0);
 float rotBall = 0;
 bool AnimBall = false;
 
-//AnimaciÛn adicional movimiento de pelota (variables)
-float ballY = 2.0f;      // Altura inicial 
+//Animaci√≥n adicional movimiento de pelota (variables)
+float ballY = 3.0f;      // Altura inicial 
 float ballMinY = 0.1f;    // Altura minima
-float ballMaxY = 2.0f;     // Altura m·xima
+float ballMaxY = 2.0f;     // Altura m√°xima
 float ballSpeed = 0.001f;  // Velocidad del movimiento 
-bool goingDown = true;     // DirecciÛn inicial
-bool AnimBallY = false;    // Control de animaciÛn vertical
+bool goingDown = true;     // Direcci√≥n inicial
+bool AnimBallY = false;    // Control de animaci√≥n vertical
 
 
 
@@ -136,7 +134,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 10  Valeria Ramirez", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 10  Valeria Ramirez", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -219,19 +217,16 @@ int main()
 		// Clear the colorbuffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	   
+
 		// OpenGL options
 		glEnable(GL_DEPTH_TEST);
 
-		
-		
-		
-	
+
 
 		// Use cooresponding shader when setting uniforms/drawing objects
 		lightingShader.Use();
 
-        glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
+		glUniform1i(glGetUniformLocation(lightingShader.Program, "diffuse"), 0);
 		//glUniform1i(glGetUniformLocation(lightingShader.Program, "specular"),1);
 
 		GLint viewPosLoc = glGetUniformLocation(lightingShader.Program, "viewPos");
@@ -240,25 +235,25 @@ int main()
 
 		// Directional light
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.direction"), -0.2f, -1.0f, -0.3f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"),0.6f,0.6f,0.6f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.ambient"), 0.6f, 0.6f, 0.6f);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.diffuse"), 0.6f, 0.6f, 0.6f);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"),0.3f, 0.3f, 0.3f);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "dirLight.specular"), 0.3f, 0.3f, 0.3f);
 
 
 		// Point light 1
-	    glm::vec3 lightColor;
-		lightColor.x= abs(sin(glfwGetTime() *Light1.x));
-		lightColor.y= abs(sin(glfwGetTime() *Light1.y));
-		lightColor.z= sin(glfwGetTime() *Light1.z);
+		glm::vec3 lightColor;
+		lightColor.x = abs(sin(glfwGetTime() * Light1.x));
+		lightColor.y = abs(sin(glfwGetTime() * Light1.y));
+		lightColor.z = sin(glfwGetTime() * Light1.z);
 
-		
+
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), lightColor.x,lightColor.y, lightColor.z);
-		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), lightColor.x,lightColor.y,lightColor.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].ambient"), lightColor.x, lightColor.y, lightColor.z);
+		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].diffuse"), lightColor.x, lightColor.y, lightColor.z);
 		glUniform3f(glGetUniformLocation(lightingShader.Program, "pointLights[0].specular"), 1.0f, 0.2f, 0.2f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].constant"), 1.0f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].linear"), 0.045f);
-		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"),0.075f);
+		glUniform1f(glGetUniformLocation(lightingShader.Program, "pointLights[0].quadratic"), 0.075f);
 
 
 		// SpotLight
@@ -272,7 +267,7 @@ int main()
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.quadratic"), 0.7f);
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.cutOff"), glm::cos(glm::radians(12.0f)));
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "spotLight.outerCutOff"), glm::cos(glm::radians(18.0f)));
-		
+
 
 		// Set material properties
 		glUniform1f(glGetUniformLocation(lightingShader.Program, "material.shininess"), 5.0f);
@@ -293,33 +288,85 @@ int main()
 
 		glm::mat4 model(1);
 
-	
-		
-		//Carga de modelo 
-        view = camera.GetViewMatrix();	
+		// ----- Movimiento circular -----
+		view = camera.GetViewMatrix();
+		float radius = 2.0f;
+		float timeValue = glfwGetTime();
+
+		// Perro y pelota giran en sentido opuesto
+		float ballX = radius * cos(timeValue);
+		float ballZ = radius * sin(timeValue);
+		float dogX = radius * cos(-timeValue);
+		float dogZ = radius * sin(-timeValue);
+
+		// Calcula distancia entre perro y pelota
+		float dx = ballX - dogX;
+		float dz = ballZ - dogZ;
+		float distance = sqrt(dx * dx + dz * dz);
+
+		// Pelota sube y baja en el punto de encuentro
+		float baseHeight = 3.0f;
+		float bounceAmplitude = 1.0f;
+		float bounceSpeed = 3.0f;
+		float ballY = baseHeight + fabs(sin(timeValue * bounceSpeed)) * bounceAmplitude;
+
+		if (distance < 0.5f) {
+			// Baja ligeramente al acercarse
+			ballY = -fabs(sin(timeValue * 5.0f)) * 0.2f;
+		}
+		else {
+			ballY = 0.0f;
+		}
+
+
+		// ----- Piso -----
 		model = glm::mat4(1);
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		Piso.Draw(lightingShader);
 
+		// ----- Perro -----
 		model = glm::mat4(1);
+
+		// Salto del perro al acercarse
+		float dogY = 0.0f;
+		float dogHitRotation = 0.0f;
+	
+		if (distance < 0.5f) {
+			dogY = fabs(sin(timeValue * 5.0f)) * 0.2f;
+			dogHitRotation = sin(glfwGetTime() * 10.0f) * glm::radians(12.0f);
+		}
+
+		// Primero rota alrededor del centro
+		float angleDog = -timeValue;  // movimiento circular suave
+		model = glm::rotate(model, angleDog, glm::vec3(0.0f, -1.0f, 0.0f));
+
+		//  Luego lo traslada hacia el borde del c√≠rculo
+		model = glm::translate(model, glm::vec3(radius, dogY, 0.0f));
+
+		//  Ahora rota para que mire hacia el centro
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		//  Aplica la inclinaci√≥n del salto
+		model = glm::rotate(model, dogHitRotation, glm::vec3(1.0f, 0.0f, 0.0f));
+
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 0);
 		Dog.Draw(lightingShader);
 
+
+		// ----- Pelota -----
 		model = glm::mat4(1);
-		glEnable(GL_BLEND);//Avtiva la funcionalidad para trabajar el canal alfa
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		model = glm::translate(model, glm::vec3(ballX, ballY, ballZ));
+		model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform1i(glGetUniformLocation(lightingShader.Program, "transparency"), 1);
+		Ball.Draw(lightingShader);
+		glDisable(GL_BLEND);
 
-		// TraslaciÛn del modelo
-		model = glm::translate(model, glm::vec3(0.0f, ballY, 0.0f));
-		model = glm::rotate(model, glm::radians(rotBall), glm::vec3(0.0f, 1.0f, 0.0f));
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-	    Ball.Draw(lightingShader); 
-		glDisable(GL_BLEND);  //Desactiva el canal alfa 
-		glBindVertexArray(0);
-	
 
 		// Also draw the lamp object, again binding the appropriate shader
 		lampShader.Use();
@@ -463,7 +510,7 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 
 	if (keys[GLFW_KEY_M])
 	{
-		AnimBallY = !AnimBallY;  // Activa o desactiva la animaciÛn vertical
+		AnimBallY = !AnimBallY;  // Activa o desactiva la animaci√≥n vertical
 	}
 }
 void Animation() {
@@ -484,7 +531,7 @@ void Animation() {
 		else
 			ballY += ballSpeed;
 
-		// Invertir direcciÛn al llegar a los lÌmites
+		// Invertir direcci√≥n al llegar a los l√≠mites
 		if (ballY <= ballMinY)
 			goingDown = false;
 		else if (ballY >= ballMaxY)
