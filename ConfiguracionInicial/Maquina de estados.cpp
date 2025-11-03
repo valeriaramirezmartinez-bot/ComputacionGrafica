@@ -1,6 +1,6 @@
-// Valeria RamÌrez MartÌnez
-// Previo 11
-// Fecha de entrega: 29 / Octubre / 2025
+Ôªø// Valeria Ram√≠rez Mart√≠nez
+// Pr√†ctica 11
+// Fecha de entrega: 03 / Noviembre / 2025
 // No. Cuenta: 318063188
 
 
@@ -57,6 +57,7 @@ glm::vec3 pointLightPositions[] = {
 	glm::vec3(0.0f,0.0f,  0.0f),
 	glm::vec3(0.0f,0.0f, 0.0f)
 };
+
 
 float vertices[] = {
 	 -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -119,7 +120,9 @@ glm::vec3 dogPos (0.0f,0.0f,0.0f);
 float dogRot = 0.0f;
 bool step = false;
 
-
+// Variables que serviran para manejar la rotaci√≤n y velocidad de este
+float targetRot = 0.0f;
+float rotSpeed = 1.0f;
 
 // Deltatime
 GLfloat deltaTime = 0.0f;	// Time between current frame and last frame
@@ -137,7 +140,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);*/
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Previo 11  Valeria Ramirez", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Practica 11  Valeria Ramirez", nullptr, nullptr);
 
 	if (nullptr == window)
 	{
@@ -508,62 +511,134 @@ void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mode
 	}
 	if (keys[GLFW_KEY_B])
 	{
-		dogAnim = 1;
+		dogAnim = 1;        // inicio del recorrido
+		AnimDog = true;     // activa animaci√≥n de patas, cabeza y cola
+		dogPos = glm::vec3(0.0f, 0.0f, 0.0f);  // reinicia posici√≥n
+		dogRot = 0.0f;
 
 	}
 	
 }
+
 void Animation() {
-	if (AnimBall)
+	if (!AnimDog) return; 
+
+	// Velocidades
+	float moveSpeed = 0.0001f; // velocidad de avance
+	float rotSpeed = 1.5f;    // velocidad de giro
+
+	// Movimiento de patas, cabeza y cola
+	static bool step = false;
+	if (step == false) {
+		RLegs += 0.1f;
+		FLegs += 0.1f;
+		head += 0.1f;
+		tail += 0.1f;
+		if (RLegs > 15.0f) step = true;
+	}
+	else {
+		RLegs -= 0.1f;
+		FLegs -= 0.1f;
+		head -= 0.1f;
+		tail -= 0.1f;
+		if (RLegs < -15.0f) step = false;
+	}
+
+	switch (dogAnim) {
+
+	case 1: // Avanza hacia adelante
+		dogPos.z += moveSpeed;
+		if (dogPos.z >= 2.3f) {
+			dogAnim = 2;                  
+			targetRot = dogRot - 90.0f;    
+		}
+		break;
+
+	case 2: // Giro a la izquierda
 	{
-		rotBall += 0.4f;
-		//printf("%f", rotBall);
+		float rotDiff = dogRot - targetRot;
+		if (rotDiff > 0.001f) {
+			dogRot -= rotSpeed;
+			if (dogRot < targetRot) dogRot = targetRot;
+		}
+		else {
+			dogRot = targetRot;
+			dogAnim = 3; 
+		}
 	}
-	
-	if (AnimDog)
+	break;
+
+	case 3: // Avanza hacia la izquierda
+		dogPos.x -= moveSpeed;
+		if (dogPos.x <= -2.3f) {
+			dogAnim = 4;
+			targetRot = dogRot - 90.0f;
+		}
+		break;
+
+	case 4: // Segundo giro a la izquierda
 	{
-		rotDog -= 0.6f;
-		//printf("%f", rotBall);
+		float rotDiff = dogRot - targetRot;
+		if (rotDiff > 0.001f) {
+			dogRot -= rotSpeed;
+			if (dogRot < targetRot) dogRot = targetRot;
+		}
+		else {
+			dogRot = targetRot;
+			dogAnim = 5;
+		}
 	}
-	if (dogAnim == 1) {  // AnimaciÛn del perro caminando
+	break;
 
-		if (!step) {
-			RLegs += 0.1f;
-			FLegs += 0.1f;
-			head += 0.1f;
-			tail += 0.1f;
-
-			if (RLegs > 15.0f) // CondiciÛn de giro
-				step = true;
+	case 5: // Avanza hacia atr√°s
+		dogPos.z -= moveSpeed;
+		if (dogPos.z <= -2.3f) {
+			dogAnim = 6;
+			targetRot = dogRot - 90.0f; 
 		}
-		else
-		{
-			RLegs -= 0.1f;
-			FLegs -= 0.1f;
-			head -= 0.1f;
-			tail -= 0.1f;
+		break;
 
-			if (RLegs < -15.0f) // CondiciÛn de giro
-				step = false;
+	case 6: // √öltimo giro a la izquierda
+	{
+		float rotDiff = dogRot - targetRot;
+		if (rotDiff > 0.001f) {
+			dogRot -= rotSpeed;
+			if (dogRot < targetRot) dogRot = targetRot;
 		}
-
-		dogPos.z += 0.0001;
-
-		// LÌmite del piso 
-		float limiteZ = 2.3f;
-
-		if (dogPos.z >= limiteZ) {
-			dogAnim = 0;
-			RLegs = 0.0f;
-			FLegs = 0.0f;
-			head = 0.0f;
-			tail = 0.0f;
+		else {
+			dogRot = targetRot;
+			dogAnim = 7;
 		}
+	}
+	break;
+
+	case 7: // Regresa al punto inicial en diagonal sin bucle
+	{
+		glm::vec3 targetPos(0.0f, 0.0f, 0.0f); // punto inicial
+		glm::vec3 direction = targetPos - dogPos; 
+		float length = glm::length(direction);
+
+		float moveSpeed = 0.001f; 
+
+		if (length > moveSpeed) { 
+			direction = glm::normalize(direction);
+			dogPos += direction * moveSpeed;       // mover en diagonal
+
+			// actualizar rotaci√≥n solo mientras se mueve
+			dogRot = glm::degrees(atan2(direction.x, direction.z));
+		}
+		else {
+			dogPos = targetPos;   
+			dogAnim = 0;          
+			AnimDog = false;      // detener animaci√≥n
+			
+		}
+	}
+	break;
 
 	}
-	
-	
 }
+
 
 void MouseCallback(GLFWwindow *window, double xPos, double yPos)
 {
