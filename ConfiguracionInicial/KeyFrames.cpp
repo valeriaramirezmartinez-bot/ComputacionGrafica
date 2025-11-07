@@ -126,7 +126,7 @@ float dogBody = 0.0f;    // cuerpo del modelo
 //KeyFrames
 float dogPosX , dogPosY , dogPosZ  ;
 
-#define MAX_FRAMES 9
+#define MAX_FRAMES 80
 int i_max_steps = 190;
 int i_curr_steps = 0;
 typedef struct _frame {
@@ -698,12 +698,12 @@ void DoMovement()
 
 	if (keys[GLFW_KEY_G])
 	{
-		dogPosX -= 0.01;
+		dogPosX -= 0.001;
 	}
 
 	if (keys[GLFW_KEY_J])
 	{
-		dogPosX += 0.01;
+		dogPosX += 0.001;
 	}
 
 	// Camera controls
